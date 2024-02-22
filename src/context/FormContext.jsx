@@ -5,20 +5,40 @@ import { createContext, useReducer } from 'react';
 export const FormContext = createContext();
 
 const initialState = {
-  formData: {},
-  currentStep: 0,
+  questions: JSON.parse(localStorage.getItem('questions')) || [
+    {
+      id: 0,
+      text: 'Enter question 0',
+    },
+  ],
+  currentStep: Number(localStorage.getItem('currentStep')) || 0,
 };
 
 const formReducer = (state, action) => {
   switch (action.type) {
-    case 'SET_FORM_DATA':
+    case 'SET_QUESTION_DATA':
       return {
         ...state,
-        formData: { ...state.formData, ...action.payload },
+        questions: state.questions.map((q) => {
+          if (q.id === state.currentStep) {
+            return {
+              ...q,
+              text: action.payload,
+            };
+          }
+          return q;
+        }),
       };
-    case 'SET_CURRENT_STEP':
+    case 'GOTO_NEXT_STEP':
       return {
         ...state,
+        questions: [
+          ...state.questions,
+          {
+            id: state.currentStep + 1,
+            text: 'Enter question 0',
+          },
+        ],
         currentStep: state.currentStep + 1,
       };
     default:
@@ -29,16 +49,17 @@ const formReducer = (state, action) => {
 const FormProvider = ({ children }) => {
   const [state, dispatch] = useReducer(formReducer, initialState);
 
-  const setformData = (stepData) => {
-    dispatch({ type: 'SET_FORM_DATA', payload: stepData });
+  const setQuestionData = (stepData) => {
+    dispatch({ type: 'SET_QUESTION_DATA', payload: stepData });
   };
 
-  const setCurrentStep = (stepData) => {
-    dispatch({ type: 'SET_CURRENT_STEP', payload: stepData });
+  const setNextQuestion = () => {
+    console.log('called');
+    dispatch({ type: 'GOTO_NEXT_STEP' });
   };
 
   return (
-    <FormContext.Provider value={{ state, setformData, setCurrentStep }}>
+    <FormContext.Provider value={{ state, setQuestionData, setNextQuestion }}>
       {children}
     </FormContext.Provider>
   );
