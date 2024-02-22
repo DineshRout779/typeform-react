@@ -94,7 +94,8 @@ const FormProvider = ({ children }) => {
 
   useEffect(() => {
     localStorage.setItem('questions', JSON.stringify(state.questions));
-  }, [state.questions, state.questions.length]);
+    localStorage.setItem('currentStep', JSON.stringify(state.currentStep));
+  }, [state.currentStep, state.questions, state.questions.length]);
 
   return (
     <FormContext.Provider

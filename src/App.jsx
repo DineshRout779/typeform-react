@@ -6,7 +6,7 @@ import { getRandomImgURL } from './utils/getRandomImgURL';
 const App = () => {
   const [showForm, setShowForm] = useState(false);
   const {
-    state: { questions, previewStep },
+    state: { questions, currentStep, previewStep },
     setQuestionData,
     setNextQuestion,
     setPreviewStep,
@@ -33,7 +33,7 @@ const App = () => {
 
   const handleNextQuestion = () => {
     setNextQuestion();
-    setPreviewStep(previewStep + 1);
+    setPreviewStep(currentStep + 1);
     inputRef.current.focus();
   };
 
