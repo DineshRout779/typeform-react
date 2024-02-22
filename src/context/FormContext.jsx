@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 
-import { createContext, useReducer } from 'react';
+import { createContext, useEffect, useReducer } from 'react';
 
 export const FormContext = createContext();
 
@@ -91,6 +91,10 @@ const FormProvider = ({ children }) => {
   const setPreviewStep = (step) => {
     dispatch({ type: 'SET_PREVIEW_STEP', payload: step });
   };
+
+  useEffect(() => {
+    localStorage.setItem('questions', JSON.stringify(state.questions));
+  }, [state.questions, state.questions.length]);
 
   return (
     <FormContext.Provider
