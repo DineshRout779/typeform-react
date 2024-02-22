@@ -1,17 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Form from './Form';
 import { useFormContext } from './hooks/useFormContext';
-
-const randomImages = [
-  'https://images.pexels.com/photos/1683492/pexels-photo-1683492.jpeg?auto=compress&cs=tinysrgb&w=600',
-  'https://images.pexels.com/photos/2437286/pexels-photo-2437286.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-  'https://images.pexels.com/photos/2894944/pexels-photo-2894944.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-  'https://images.pexels.com/photos/789555/pexels-photo-789555.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-  'https://images.pexels.com/photos/105808/pexels-photo-105808.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-];
-
-const getRandomImgURL = () =>
-  randomImages[Math.floor(Math.random() * randomImages.length)];
+import { getRandomImgURL } from './utils/getRandomImgURL';
 
 const App = () => {
   const [showForm, setShowForm] = useState(false);
@@ -50,13 +40,7 @@ const App = () => {
   return (
     <div className='min-h-screen '>
       {showForm ? (
-        <div className='container max-w-[480px] mx-auto w-[90%] min-h-screen flex justify-center items-center'>
-          <div className='w-full'>
-            <h2 className='text-4xl my-4 font-medium'>Typeform</h2>
-
-            <Form questions={questions} />
-          </div>
-        </div>
+        <Form questions={questions} />
       ) : (
         <div className='container max-w-[1200px] mx-auto w-[95%]'>
           <h2 className='text-4xl my-4 font-medium'>Typeform</h2>
