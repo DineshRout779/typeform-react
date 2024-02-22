@@ -1,6 +1,17 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Form from './Form';
 import { useFormContext } from './hooks/useFormContext';
+
+const randomImages = [
+  'https://images.pexels.com/photos/1683492/pexels-photo-1683492.jpeg?auto=compress&cs=tinysrgb&w=600',
+  'https://images.pexels.com/photos/2437286/pexels-photo-2437286.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  'https://images.pexels.com/photos/2894944/pexels-photo-2894944.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  'https://images.pexels.com/photos/789555/pexels-photo-789555.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  'https://images.pexels.com/photos/105808/pexels-photo-105808.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+];
+
+const getRandomImgURL = () =>
+  randomImages[Math.floor(Math.random() * randomImages.length)];
 
 const App = () => {
   const [showForm, setShowForm] = useState(false);
@@ -10,8 +21,14 @@ const App = () => {
     setNextQuestion,
     setPreviewStep,
   } = useFormContext();
+  const [imgURL, setImgURL] = useState(null);
 
   const inputRef = useRef();
+
+  useEffect(() => {
+    const url = getRandomImgURL();
+    setImgURL(url);
+  }, [questions.length, previewStep]);
 
   // console.log(questions, currentStep);
 
@@ -33,10 +50,12 @@ const App = () => {
   return (
     <div className='min-h-screen '>
       {showForm ? (
-        <div className='container max-w-[480px] mx-auto w-[90%]'>
-          <h2 className='text-4xl my-4 font-medium'>Typeform</h2>
+        <div className='container max-w-[480px] mx-auto w-[90%] min-h-screen flex justify-center items-center'>
+          <div className='w-full'>
+            <h2 className='text-4xl my-4 font-medium'>Typeform</h2>
 
-          <Form questions={questions} />
+            <Form questions={questions} />
+          </div>
         </div>
       ) : (
         <div className='container max-w-[1200px] mx-auto w-[95%]'>
@@ -73,31 +92,46 @@ const App = () => {
             </div>
 
             {/* edit question */}
-            <div className='basis-1/3 border p-4 rounded-md'>
-              <h2 className='font-medium text-xl mb-4'>Edit question</h2>
+            <div className='basis-2/3 border p-4 rounded-md'>
+              <div className='flex justify-between items-center mb-4'>
+                <h2 className='font-medium text-xl mb-4'>Edit question</h2>
 
-              <form>
-                <input
-                  type='text'
-                  ref={inputRef}
-                  autoFocus
-                  value={questions.find((q) => q.id === previewStep).text}
-                  onChange={handleChange}
-                  className='p-2 border-b w-full block my-4 outline-none'
-                  placeholder='Enter question'
-                />
-              </form>
-            </div>
-
-            {/* form previewer */}
-            <div className='basis-1/2 border p-4 rounded-md'>
-              <div className='flex justify-end'>
                 <button
                   onClick={() => setShowForm(true)}
                   className='bg-black p-2 px-4 rounded-md text-sm text-white'
                 >
                   Preview
                 </button>
+              </div>
+              <div className='flex justify-center items-center min-h-[30vh] border shadow-md'>
+                <form
+                  onSubmit={(e) => e.preventDefault()}
+                  className='basis-1/2 block p-10'
+                >
+                  <h3 className='font-medium text-xl'>Typeform</h3>
+                  <input
+                    type='text'
+                    ref={inputRef}
+                    autoFocus
+                    value={questions.find((q) => q.id === previewStep).text}
+                    onChange={handleChange}
+                    className='border-b w-full block my-4 outline-none'
+                    placeholder='Enter question'
+                  />
+                  <p className='text-xs w-fit border-b'>
+                    Your repsonse goes here
+                  </p>
+                </form>
+                <div className='basis-1/2'>
+                  <img src={imgURL} loading='lazy' alt='' />
+                </div>
+              </div>
+            </div>
+
+            {/* form previewer */}
+            {/* <div className='basis-1/2 border p-4 rounded-md'>
+              <div className='flex justify-end'>
+                
               </div>
               {questions.map((q) => {
                 if (q.id === previewStep) {
@@ -109,7 +143,7 @@ const App = () => {
                 }
                 return null;
               })}
-            </div>
+            </div> */}
           </div>
         </div>
       )}
