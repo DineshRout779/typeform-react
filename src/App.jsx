@@ -5,27 +5,29 @@ import { useFormContext } from './hooks/useFormContext';
 const App = () => {
   const [showForm, setShowForm] = useState(false);
   const {
-    state: { questions, currentStep },
+    state: { questions, previewStep },
     setQuestionData,
     setNextQuestion,
+    setPreviewStep,
   } = useFormContext();
-  const [previewId, setPreviewId] = useState(0);
 
   const inputRef = useRef();
 
-  console.log(questions, currentStep);
+  // console.log(questions, currentStep);
 
   const handleChange = (e) => {
     setQuestionData(e.target.value);
   };
 
   const handleActivePreview = (id) => {
-    setPreviewId(id);
+    setPreviewStep(id);
+    inputRef.current.focus();
   };
 
   const handleNextQuestion = () => {
     setNextQuestion();
-    setPreviewId(previewId + 1);
+    setPreviewStep(previewStep + 1);
+    inputRef.current.focus();
   };
 
   return (
@@ -52,7 +54,7 @@ const App = () => {
                   <button
                     key={q.id}
                     className={`w-full text-left my-2 p-2 rounded-md ${
-                      q.id === previewId
+                      q.id === previewStep
                         ? 'text-white bg-blue-300'
                         : 'bg-gray-200'
                     }`}
@@ -74,11 +76,12 @@ const App = () => {
             <div className='basis-1/3 border p-4 rounded-md'>
               <h2 className='font-medium text-xl mb-4'>Edit question</h2>
 
-              <form onSubmit={handleNextQuestion}>
+              <form>
                 <input
                   type='text'
                   ref={inputRef}
-                  value={questions.find((q) => q.id === previewId).text}
+                  autoFocus
+                  value={questions.find((q) => q.id === previewStep).text}
                   onChange={handleChange}
                   className='p-2 border-b w-full block my-4 outline-none'
                   placeholder='Enter question'
@@ -97,7 +100,7 @@ const App = () => {
                 </button>
               </div>
               {questions.map((q) => {
-                if (q.id === previewId) {
+                if (q.id === previewStep) {
                   return (
                     <div className='p-2' key={q.id} aria-disabled='true'>
                       <p>{q.text}</p>

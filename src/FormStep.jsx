@@ -4,20 +4,17 @@ import { useFormContext } from './hooks/useFormContext';
 import { motion } from 'framer-motion';
 
 const FormStep = ({ question }) => {
-  const { state, setformData, setCurrentStep } = useFormContext();
+  const { state, setFormData, getNextQuesion } = useFormContext();
 
   console.log('state: ', state);
 
   const handleChange = (e) => {
-    // console.log(e.target);
-    // console.log(question.id);
-    setformData({ [question.id]: e.target.value });
+    setFormData({ id: question.id, value: e.target.value });
   };
 
   const handleNext = (e) => {
     e.preventDefault();
-
-    setCurrentStep();
+    getNextQuesion();
   };
 
   return (

@@ -6,10 +6,13 @@ import { motion } from 'framer-motion';
 
 const Form = ({ questions }) => {
   const { state } = useFormContext();
-  const currentStep = state.currentStep;
+  const currentStep = state.currentResponseStep;
+
+  // console.log(questions, currentStep);
 
   const renderCurrentStep = () => {
     if (currentStep < questions.length) {
+      // console.log(cur)
       const currentQuestion = questions[currentStep];
       return <FormStep key={currentQuestion.id} question={currentQuestion} />;
     } else {

@@ -1,9 +1,6 @@
-import { useFormContext } from './hooks/useFormContext';
 import { motion } from 'framer-motion';
 
 const FormResult = () => {
-  const { state } = useFormContext();
-
   return (
     <motion.div
       initial={{ x: 200, opacity: 0 }}
@@ -20,10 +17,7 @@ const FormResult = () => {
         },
       }}
     >
-      <h3>
-        Hey {state.formData.name}, you&apos;re aged {state.formData.age} and lve
-        in {state.formData.city}
-      </h3>
+      <h3>Your responses has been saved ✅</h3>
     </motion.div>
   );
 };
